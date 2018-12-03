@@ -1,0 +1,27 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: redis-slave
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: redis-slave
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        run: redis-slave
+
+    spec:
+      containers:
+      - name: redis-server
+        image: kubernetes/redis-slave:v2
+        ports:
+        - name: redis-server
+          containerPort: 6379
